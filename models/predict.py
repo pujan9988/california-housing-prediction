@@ -50,6 +50,7 @@ def make_input(input_data:list,lamda_values:list,scaler) -> list:
     return transformed_data_scaled
 
 def make_prediction(input_data:list,model) -> list:
+    
     pred_value_transformed = model.predict(input_data)
     pred_value = inv_boxcox(pred_value_transformed,lamda_values[-1])
     return pred_value
