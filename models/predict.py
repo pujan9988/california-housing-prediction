@@ -1,20 +1,27 @@
+import os
 import sys
 sys.path.append('..')
+
 import joblib
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
 from scipy.special import inv_boxcox
 
-from model import lambda_values
+from models.model import lambda_values
 from src.preprocessing import boxcox
 
+current_scirpt_dir = os.path.dirname(__file__)
+
+model_path = os.path.join(current_scirpt_dir,"ranfor_model.joblib")
+scaler_path = os.path.join(current_scirpt_dir,"scaler.joblib")
+
 def load_model():
-    model = joblib.load("ranfor_model.joblib")
+    model = joblib.load(model_path)
     return model
 
 def load_std_scaler():
-    scaler = joblib.load("scaler.joblib")
+    scaler = joblib.load(scaler_path)
     return scaler
 
 
@@ -26,32 +33,39 @@ columns = ["longitude","latitude","housingMedianAge","totalRooms","totalBedrooms
 lamda_values = [value for value in lambda_values.values()]
 
 
-def make_input(input_data:list,lamda_values:list) -> list:
+def make_input(input_data:list,lamda_values:list,scaler) -> list:
 
     input_data[0] += abs(min_value_longitude) + constant
-    transformed_data = np.empty(shape=(1,8))
+    transformed_data = []
 
     #since input_data has 8 elements, the element of lamda_values(for medianHouseValue)
     #will be ignored in for loop due to the zip function 
 
     for data,lamda_value in zip(input_data,lamda_values):
-        np.append(transformed_data,boxcox(data,lmbda=lamda_value))
+        transformed_data.append(boxcox(data,lmbda=lamda_value))
 
-    scaler = load_std_scaler()
+    transformed_data = np.array(transformed_data).reshape(1,-1)
     transformed_data_scaled = scaler.transform(transformed_data)
 
     return transformed_data_scaled
 
+def make_prediction(input_data:list,model) -> list:
+    pred_value_transformed = model.predict(input_data)
+    pred_value = inv_boxcox(pred_value_transformed,lamda_values[-1])
+    return pred_value
+
+
 
 if __name__ =="__main__":
-    actual_output = 358500.000000
-    new_data = [-122.220000,37.860000,21.000000,7099.000000,1106.000000,2401.000000,1138.000000,8.301400]
+    actual_output = 52900
+    new_data = [-1.1906e+02,  3.6150e+01,  2.5000e+01,  2.4020e+03,  4.7800e+02,
+         1.5270e+03,  4.6100e+02,  2.3194e+00]
+    scaler = load_std_scaler()
 
-    tranformed_data = make_input(new_data,lamda_values=lamda_values)
+    tranformed_data = make_input(new_data,lamda_values=lamda_values,scaler=scaler)
 
     model = load_model()
-    pred = model.predict(tranformed_data)
 
-    pred_original = inv_boxcox(pred,lamda_values[-1])
-    print(pred_original)
+    pred_value = make_prediction(tranformed_data,model=model)
+    print(pred_value)
     print(actual_output)
