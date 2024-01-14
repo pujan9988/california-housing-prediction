@@ -1,8 +1,10 @@
 import sys
 sys.path.append("../..")
+import numpy as np 
+
 
 import streamlit as st 
-from models.predict import lamda_values,make_input,make_prediction,load_model,load_std_scaler
+from models.predict import lamda_values, make_input, make_prediction, load_model, load_std_scaler
 
 st.set_page_config(
     page_title="Prediction",
@@ -11,15 +13,28 @@ st.set_page_config(
 
 st.title("Prediction")
 
-actual_output = 140000
-new_data = [-122.26,37.85,50,1120,283,697,264,2.125]
-scaler = load_std_scaler()
+# Input fields
+longitude = st.number_input("Enter the value of block group longitude:", value=0.0)
+latitude = st.number_input("Enter the value of block group latitude:", value=0.0)
+housingMedianAge = st.number_input("Enter the Housing Median Age in block group:", value=0.0)
+totalRooms = st.number_input("Enter the average no of rooms per household:", value=0.0)
+totalBedrooms = st.number_input("Enter the average no of bedrooms per household:", value=0.0)
+population = st.number_input("Enter the block group population", value=0.0)
+households = st.number_input("Enter the average no of household members", value=0.0)
+medianIncome = st.number_input("Enter the median income in block group", value=0.0)
 
-tranformed_data = make_input(new_data,lamda_values=lamda_values,scaler=scaler)
+# Button to trigger prediction
+if st.button("Predict"):
 
-model = load_model()
-# pred_original = make_prediction(tranformed_data,model=model)
-pred_value = make_prediction(tranformed_data,model=model)
+    new_data = [longitude, latitude, housingMedianAge, totalRooms,
+                totalBedrooms, population, households, medianIncome]
 
-st.write(f"original value: {actual_output}")
-st.write(f"predicted value: {pred_value}")
+    scaler = load_std_scaler()
+    transformed_data = make_input(new_data, lamda_values=lamda_values, scaler=scaler)
+
+
+    model = load_model()
+    pred_value = make_prediction(transformed_data, model=model)
+    pred_value = pred_value.item()
+    
+    st.success(f"Predicted Housing Value: ${pred_value:.2f}")
