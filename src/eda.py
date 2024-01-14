@@ -14,6 +14,7 @@ def show_head(df:pd.DataFrame):
 
 df.isna().sum()
 
+
 df.info()
 
 df.describe()
@@ -27,6 +28,8 @@ columns = [column for column in sample_df.columns if not column=="medianHouseVal
 vertical = sample_df["medianHouseValue"]
 colors = ["red","green","blue","indigo","magenta","cyan","black","crimson"]
 markers = ["x","o","X","*","+","D","d","P"]
+
+
 fig,axes = plt.subplots(nrows=2,ncols=4,figsize=(10,10))
 axes = axes.flatten()
 for i,ax in enumerate(axes):
