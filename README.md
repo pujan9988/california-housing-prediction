@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project focuses on predicting housing prices in California using machine learning. The project is hosted on a web application built with Streamlit, and the deployed website can be accessed [here](https://8501-01hhya51p79ksvpf6jwksyw15r.cloudspaces.litng.ai/?fbclid=IwAR17e4N1tKwDtLjgQts7OXvrtIH2_B286Gn77AkzPDfW28r35S_uLYiXnhE).
+This project focuses on predicting housing prices in California using machine learning. The project is hosted on a web application built with Streamlit, and the deployed website can be accessed [here](https://pujanpaudel-cal-housing.hf.space).
 
 ## 📊 Notebooks
 
@@ -16,7 +16,7 @@ The project details and exploration are documented in Jupyter notebooks, located
 
 ## 🌐 Web Application
 
-The deployed web application allows users to interact with the model and explore housing predictions for different scenarios. Visit the hosted website [here](https://8501-01hhya51p79ksvpf6jwksyw15r.cloudspaces.litng.ai/?fbclid=IwAR17e4N1tKwDtLjgQts7OXvrtIH2_B286Gn77AkzPDfW28r35S_uLYiXnhE) for a hands-on experience.
+The deployed web application allows users to interact with the model and explore housing predictions for different scenarios. Visit the hosted website [here](https://pujanpaudel-cal-housing.hf.space) for a hands-on experience.
 
 For additional information, refer to the project description on the website.
 
